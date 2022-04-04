@@ -12,6 +12,12 @@ Item::Item (string inDescription, int inWeightGrams, float inValue, bool isWeapo
     }
 }
 
+Item::Item(const Item& item)
+    :description(item.description), weightGrams(item.weightGrams), value(item.value), weaponCheck(item.weaponCheck)
+{
+}
+
+
 void Item::setWeight(int inWeightGrams)
 {
     if (inWeightGrams > 9999 || inWeightGrams < 0)
@@ -53,4 +59,20 @@ string Item::getLongDescription()
 {
 	return " item(s), " + description + ".\n";
 }
+
+int Item::getWeight()
+{
+    return weightGrams;
+}
+
+float Item::getValue()
+{
+    return value;
+}
+
+int Item::getWeaponCheck()
+{
+    return weaponCheck;
+}
+
 

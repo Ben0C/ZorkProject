@@ -16,6 +16,7 @@ private:
 
 public:
     Item (string description, int inWeight = 5, float inValue = 5, bool isWeapon = false);
+    Item (const Item& item);
 	string getShortDescription();
     string getLongDescription();
 	int getWeight();
@@ -23,7 +24,14 @@ public:
 	float getValue();
 	void setValue(float value);
 	int getWeaponCheck();
-    void setWeaponCheck(bool weaponCheck);
+    //void setWeaponCheck(bool weaponCheck);
+    bool operator == (Item item)
+    {
+        if(weightGrams == item.getWeight() && value == item.getValue() && weaponCheck == item.getWeaponCheck() && description == item.getShortDescription())
+            return true;
+        else
+            return false;
+    }
 };
 
 #endif /*ITEM_H_*/

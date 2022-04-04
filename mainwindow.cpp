@@ -10,10 +10,13 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     QPixmap pix("C:/Users/benoc/Documents/ZorkProject/Images/glep.png");
     ui->label->setPixmap(pix.scaled(100, 100, Qt::KeepAspectRatio));
+
+    Enemy::setNumOfEnemies(0);
+    Boss::setNumOfBosses(0);
     createRooms();
-   // Room& refToRoom = new Room("fum");
     moveState();
     printWelcome();
 }

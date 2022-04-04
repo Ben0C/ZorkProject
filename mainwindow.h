@@ -1,14 +1,19 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+
 #include "Room.h"
+#include "enemy.h"
+#include "boss.h"
 #include "item.h"
-#include <iostream>
-#include <string>
+
+
 #include <QPixmap>
 #include <QShortcut>
 #include <QPixmap>
 #include <QShortcut>
 #include <QObject>
+#include <iostream>
+#include <string>
 using namespace std;
 
 #include <QMainWindow>

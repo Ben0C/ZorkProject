@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     Character.cpp \
     Room.cpp \
+    boss.cpp \
     enemy.cpp \
     item.cpp \
     main.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
 HEADERS += \
     Character.h \
     Room.h \
+    boss.h \
     enemy.h \
     item.h \
     mainwindow.h
