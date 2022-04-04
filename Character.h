@@ -10,19 +10,15 @@ using std::vector;
 
 class Character {
 private:
-	string description;
+    string description;
     vector <Item> itemsInCharacter;
-public:
-    void addItems(Item *item);
-
-
-
 
 public:
     Character(string description = "no description given");
 	string shortDescription();
 	string longDescription();
-
+    void addItems(Item &item);
+    void addItems(Item *item);
 };
 
 #endif CHARACTER_H_

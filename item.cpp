@@ -28,6 +28,7 @@ void Item::setValue(float inValue)
 	   value = inValue;
 }
 
+/*
 void Item::setWeaponCheck(bool isWeapon)
 {
     if(isWeapon)
@@ -41,6 +42,7 @@ void Item::setWeaponCheck(bool isWeapon)
     }
 
 }
+*/
 
 string Item::getShortDescription()
 {

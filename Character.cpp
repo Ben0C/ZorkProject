@@ -5,9 +5,9 @@ Character::Character(string description)
 {
 }
 
-//void Character::addItems(Item &item) {
-//    itemsInCharacter.push_back(item);
-//}
+void Character::addItems(Item &item) {
+    itemsInCharacter.push_back(item);
+}
 
 void Character::addItems(Item *item)
 {
