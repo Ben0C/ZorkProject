@@ -1,20 +1,38 @@
 #include "item.h"
-Item::Item (string inDescription, int inWeightGrams, float inValue, bool isWeapon)
-    :description(inDescription), weightGrams(inWeightGrams), value(inValue), weaponCheck(isWeapon)
+Item::Item (string inDescription, int inWeightGrams, int inDmg, bool isWeapon)
+    :description(inDescription), weightGrams(inWeightGrams), dmg(inDmg), weaponCheck(isWeapon)
 {
-    if(isWeapon)
+    if(weaponCheck)
     {
-        description += "\n*WEAPON*";
+        description += " *WEAPON*";
+        longDescription = ("name: " + description
+                           + ".\nweight: " + std::to_string(weightGrams)
+                           + ".\ndmg: " + std::to_string(dmg)
+                           + "------------------------------------");
     }
     else
     {
-        description += "\n*ITEM*";
+        description += " *ITEM*";
+        longDescription = ("name: " + description
+                           + ".\nweight: " + std::to_string(weightGrams)
+                           + "------------------------------------");
     }
 }
 
 Item::Item(const Item& item)
-    :description(item.description), weightGrams(item.weightGrams), value(item.value), weaponCheck(item.weaponCheck)
+    :description(item.description), weightGrams(item.weightGrams), weaponCheck(item.weaponCheck), dmg(item.dmg)
 {
+    if(weaponCheck)
+    {
+        longDescription = ("name: " + description
+                           + ".\nweight: " + std::to_string(weightGrams)
+                           + ".\ndmg: " + std::to_string(dmg));
+    }
+    else
+    {
+        longDescription = ("name: " + description
+                           + ".\nweight: " + std::to_string(weightGrams));
+    }
 }
 
 
@@ -26,6 +44,7 @@ void Item::setWeight(int inWeightGrams)
 	   weightGrams = inWeightGrams;
 }
 
+/*
 void Item::setValue(float inValue)
 {
     if (inValue > 9999 || inValue < 0)
@@ -33,6 +52,7 @@ void Item::setValue(float inValue)
     else
 	   value = inValue;
 }
+*/
 
 /*
 void Item::setWeaponCheck(bool isWeapon)
@@ -57,7 +77,7 @@ string Item::getShortDescription()
 
 string Item::getLongDescription()
 {
-	return " item(s), " + description + ".\n";
+    return longDescription;
 }
 
 int Item::getWeight()
@@ -65,10 +85,12 @@ int Item::getWeight()
     return weightGrams;
 }
 
+/*
 float Item::getValue()
 {
     return value;
 }
+*/
 
 int Item::getWeaponCheck()
 {

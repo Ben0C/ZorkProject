@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>983</width>
-    <height>600</height>
+    <width>989</width>
+    <height>625</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,34 +35,34 @@
      <rect>
       <x>10</x>
       <y>400</y>
-      <width>256</width>
-      <height>103</height>
+      <width>381</width>
+      <height>171</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="1">
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="northButton">
        <property name="text">
         <string>North</string>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="southButton">
        <property name="text">
         <string>South</string>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QPushButton" name="westButton">
        <property name="text">
         <string>West</string>
        </property>
       </widget>
      </item>
      <item row="1" column="2">
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="eastButton">
        <property name="text">
         <string>East</string>
        </property>
@@ -73,26 +73,53 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>440</x>
-      <y>410</y>
-      <width>221</width>
-      <height>111</height>
+      <x>600</x>
+      <y>20</y>
+      <width>371</width>
+      <height>541</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
    </widget>
+   <widget class="QWidget" name="gridLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>400</y>
+      <width>171</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QPushButton" name="pickUpButton">
+       <property name="text">
+        <string>Pick Up</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="InventoryButton">
+       <property name="text">
+        <string>InventoryButton</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
    <zorder>label</zorder>
    <zorder>textEdit</zorder>
    <zorder>gridLayoutWidget</zorder>
+   <zorder>gridLayoutWidget_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>983</width>
+     <width>989</width>
      <height>25</height>
     </rect>
    </property>

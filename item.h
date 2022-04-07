@@ -11,23 +11,24 @@ private:
 	string description;
 	string longDescription;
 	int weightGrams;
-	float value;
+    // value;
 	bool weaponCheck;
+    int dmg;
 
 public:
-    Item (string description, int inWeight = 5, float inValue = 5, bool isWeapon = false);
+    Item (string description = "unknown", int inWeight = 5, int dmg = 1, bool isWeapon = false);
     Item (const Item& item);
 	string getShortDescription();
     string getLongDescription();
 	int getWeight();
 	void setWeight(int weightGrams);
-	float getValue();
-	void setValue(float value);
+    //float getValue();
+    //void setValue(float value);
 	int getWeaponCheck();
     //void setWeaponCheck(bool weaponCheck);
     bool operator == (Item item)
     {
-        if(weightGrams == item.getWeight() && value == item.getValue() && weaponCheck == item.getWeaponCheck() && description == item.getShortDescription())
+        if(weightGrams == item.getWeight() && weaponCheck == item.getWeaponCheck() && description == item.getShortDescription())
             return true;
         else
             return false;

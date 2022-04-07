@@ -43,6 +43,17 @@ void Room::addItem(Item *inItem) {
     itemsInRoom.push_back(*inItem);
 }
 
+void Room::addItem(Item inItem) {
+    //cout <<endl;
+    //cout << "Just added" + inItem->getLongDescription();
+    itemsInRoom.push_back(inItem);
+}
+
+void Room::removeItem(int arrNum)
+{
+    itemsInRoom.erase(itemsInRoom.begin() + arrNum);
+}
+
 string Room::displayItem() {
     string tempString = "items in room = \n";
     int sizeItems = (itemsInRoom.size());
@@ -80,6 +91,11 @@ int Room::isItemInRoom(string inString)
             }
         }
     return -1;
+}
+
+vector<Item> Room::getItems()
+{
+    return itemsInRoom;
 }
 
 void output_description(Room room){

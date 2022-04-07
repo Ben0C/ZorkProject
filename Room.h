@@ -25,10 +25,14 @@ public:
     string longDescription();
 	Room* nextRoom(string direction);
     void addItem(Item *inItem);
+    void addItem(Item inItem);
+    void removeItem(int arrNum);
     string displayItem();
     int isItemInRoom(string inString);
-    void removeItemFromRoom(int location);
+    vector <Item> getItems();
+    //void removeItemFromRoom(int location);
     friend void output_description(Room room);
+
 };
 
 #endif
