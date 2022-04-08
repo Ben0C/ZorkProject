@@ -1,6 +1,6 @@
 #include "item.h"
-Item::Item (string inDescription, int inWeightGrams, int inDmg, int inHealing, bool isWeapon)
-    :description(inDescription), weightGrams(inWeightGrams), dmg(inDmg), healing(inHealing), weaponCheck(isWeapon)
+Item::Item (string inDescription, int inWeightGrams, int inDmg, int inHealing, bool isWeapon, bool isThrowable)
+    :description(inDescription), weightGrams(inWeightGrams), dmg(inDmg), healing(inHealing), weaponCheck(isWeapon), throwableCheck(isThrowable)
 {
     if(weaponCheck)
     {
@@ -9,13 +9,13 @@ Item::Item (string inDescription, int inWeightGrams, int inDmg, int inHealing, b
                            + ".\nweight: " + std::to_string(weightGrams)
                            + ".\ndmg: " + std::to_string(dmg)
                            + ".\n------------------------------------");
-    } else if(dmg > 0) {
+    } else if(throwableCheck) {
         description += " *THROWABLE*";
         longDescription = ("name: " + description
                            + ".\nweight: " + std::to_string(weightGrams)
                            + ".\ndmg: " + std::to_string(dmg)
                            + ".\n------------------------------------");
-    } else if(healing > 0) {
+    } else if(healing > 0 && !weaponCheck) {
         description += " *CONSUMEABLE*";
         longDescription = ("name: " + description
                            + ".\nweight: " + std::to_string(weightGrams)
@@ -33,12 +33,12 @@ Item::Item(const Item& item)
                            + ".\nweight: " + std::to_string(weightGrams)
                            + ".\ndmg: " + std::to_string(dmg)
                            + ".\n------------------------------------");
-    } else if(dmg > 0) {
+    } else if(dmg > 0 && !weaponCheck) {
         longDescription = ("name: " + description
                            + ".\nweight: " + std::to_string(weightGrams)
                            + ".\ndmg: " + std::to_string(dmg)
                            + ".\n------------------------------------");
-    } else if(healing > 0) {
+    } else if(healing > 0 && !weaponCheck) {
         longDescription = ("name: " + description
                            + ".\nweight: " + std::to_string(weightGrams)
                            + ".\nhealing: " + std::to_string(healing)

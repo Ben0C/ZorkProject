@@ -63,7 +63,7 @@ private:
     void createRooms();
     //void setShortcuts();
     void printWelcome();
-    void printRoomDetails();
+    void showRoomDetails();
     QString getRoomDetails();
     void printHelp();
     void goRoom(string direction);

@@ -19,7 +19,7 @@ private:
     int dmg;
 
 public:
-    Character(string inDescription = "no description given", int inHealth = 5, Item inWeapon = Item("stick", 1, 1, true));
+    Character(string inDescription = "no description given", int inHealth = 5, Item inWeapon = Item("stick", 1, 1, 0, true, false));
     ~Character();
 	string shortDescription();
 	string longDescription();

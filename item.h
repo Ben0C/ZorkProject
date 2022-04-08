@@ -12,12 +12,14 @@ private:
 	string longDescription;
 	int weightGrams;
     // value;
-	bool weaponCheck;
     int dmg;
     int healing;
+	bool weaponCheck;
+    bool throwableCheck;
+
 
 public:
-    Item (string inDescription = "unknown", int inWeight = 5, int inDmg = 0, int inHealing = 0, bool isWeapon = false);
+    Item (string inDescription = "unknown", int inWeight = 5, int inDmg = 0, int inHealing = 0, bool isWeapon = false, bool isThrowable = false);
     Item (const Item& item);
 	string getShortDescription();
     string getLongDescription();

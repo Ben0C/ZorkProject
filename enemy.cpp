@@ -4,7 +4,7 @@ Enemy::Enemy(string inName, string inDescription, int inHealth, int inDmg, int i
     :name(inName), description(inDescription), health(inHealth), dmg(inDmg), expGain(inExpGain)
 {  
     numOfEnemies++;
-    longDescription = (this->name + "\nhealth: " + to_string(this->health));
+    longDescription = (this->name + "\n" + description + "\natk: " + to_string(this->dmg));
     maxHealth = inHealth;
 }
 

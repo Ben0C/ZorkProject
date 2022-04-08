@@ -52,28 +52,28 @@ void MainWindow::createRooms()  {
 
 
     a = new Room();
-        a->addItem(new Item("weapon", 1, 10, 0, true));
+        a->addItem(new Item("weapon", 1, 10, 0, true, false));
         //a->addItem(new Item("y", 2, 22, false));
     b = new Room("b");
-        b->addItem(new Item("x1", 3, 1, 0,  false));
-        b->addItem(new Item("y1", 4, 0, 1, false));
+        b->addItem(new Item("x1", 3, 1, 0,  false, true));
+        b->addItem(new Item("y1", 4, 0, 1, false, false));
         b->setEnemy(BasicEnemy("bat", "flies about aimlessly", 5, 2, 3));
     c = new Room("c");
-        c->addItem(new Item("x2", 3, 0, 1, false));
-        c->addItem(new Item("y2", 4, 1, 0, false));
-        c->addItem(new Item("z2", 4, 0, 1, false));
+        c->addItem(new Item("x2", 3, 0, 1, false, false));
+        c->addItem(new Item("y2", 4, 1, 0, false, true));
+        c->addItem(new Item("z2", 4, 0, 1, false, false));
         c->setEnemy(BasicEnemy("bat", "flies about aimlessly", 5, 20, 3));
     d = new Room("d");
-        d->addItem(new Item("x3", 3, 0, 1, false));
-        d->addItem(new Item("y3", 4, 0, 1, false));
-        d->addItem(new Item("z3", 4, 0, 1, false));
-        d->addItem(new Item("q3", 4, 0, 1, false));
+        d->addItem(new Item("x3", 3, 0, 1, false, false));
+        d->addItem(new Item("y3", 4, 0, 1, false, false));
+        d->addItem(new Item("z3", 4, 0, 1, false, false));
+        d->addItem(new Item("q3", 4, 0, 1, false, false));
     e = new Room("e");
     f = new Room("f");
-        f->addItem(new Item("x4", 3, 0, 1, false));
-        f->addItem(new Item("y4", 4, 1, 0, false));
-        f->addItem(new Item("z4", 4, 1, 0, false));
-        f->addItem(new Item("q4", 4, 0, 1, false));
+        f->addItem(new Item("x4", 3, 0, 1, false, false));
+        f->addItem(new Item("y4", 4, 1, 0, false, true));
+        f->addItem(new Item("z4", 4, 1, 0, false, true));
+        f->addItem(new Item("q4", 4, 0, 1, false, false));
     g = new Room("g");
         Boss *fBoss = new Boss(2, "grog", "grogs around", 30, 5, 20);
         floorBoss = dynamic_cast<Boss*>(fBoss);
@@ -115,11 +115,10 @@ void MainWindow::setShortcuts(){
 
 inline void MainWindow::printWelcome()
 {
-    ui->textEdit->setText("start \ninfo for help \n\n" +
-                          getRoomDetails() + "\n");
+    showRoomDetails();
 }
 
-inline void MainWindow::printRoomDetails()
+inline void MainWindow::showRoomDetails()
 {
     ui->textEdit->setText(QConvert::convert(currentRoom->longDescription()));
 }
@@ -133,10 +132,13 @@ void MainWindow::goRoom(string direction) {
 
     // Try to leave current room.
     Room* nextRoom = currentRoom->nextRoom(direction);
+    ui->statusBar->setText(" ");
 
     if (nextRoom == NULL)
-        ui->textEdit->setText("You cannot go that way\n\n" + QConvert::convert(currentRoom->longDescription()));
-    else {
+    {
+        showRoomDetails();
+        ui->statusBar->setText("you cannot go that way");
+    } else {
         previousRoom = currentRoom;
         currentRoom = nextRoom;
         if(currentRoom->checkForEnemy())
@@ -151,13 +153,14 @@ void MainWindow::goRoom(string direction) {
             ui->textEdit->setText(QConvert::convert(currentEnemy->getLongDescription()));
             return;
         }
-        printRoomDetails();
+        showRoomDetails();
     }
 }
 
 
 void MainWindow::showInventory()
 {
+    ui->statusBar->setText(" ");
     string itemList = "";
     for(int i = 0; i < charItems.size(); i++)
     {
@@ -230,28 +233,30 @@ void MainWindow::atkEnemy(int inDmg)
     {
         currentEnemy->slain();
         currentRoom->removeEnemy();
-        ui->textEdit->setText("Turn " + QConvert::convertToString(battleTurn) +
+        showRoomDetails();
+        ui->statusBar->setText("Turn " + QConvert::convertToString(battleTurn) +
                               "\nyou dealt " + QConvert::convertToString(inDmg) + " damage to " + enemyName +
                               "\n" + enemyName + " died\n" +
-                              "you gained " + QConvert::convertToString(currentEnemy->getExpGain()) + " experience\n\n\n" +
-                              getRoomDetails());
+                              "you gained " + QConvert::convertToString(currentEnemy->getExpGain()) + " experience");
         moveState();
     } else if(currentEnemy->getHealth() < 1 && currentEnemy->getType() == "boss") {
         if (floorBoss->getPhases() < 1)
         {
             currentEnemy->slain();
             currentRoom->removeEnemy();
-            ui->textEdit->setText("Turn " + QConvert::convertToString(battleTurn) +
+            showRoomDetails();
+            ui->statusBar->setText("Turn " + QConvert::convertToString(battleTurn) +
                                   "\nyou dealt " + QConvert::convertToString(inDmg) + " damage to " + enemyName +
                                   "\n" + enemyName + " died\n" +
-                                  "you gained " + QConvert::convertToString(currentEnemy->getExpGain()) + " experience\n\n\n" +
-                                  getRoomDetails());
+                                  "you gained " + QConvert::convertToString(currentEnemy->getExpGain()) + " experience");
             moveState();
         } else {
             floorBoss->setPhases(floorBoss->getPhases() - 1);
             currentEnemy->setHealth(currentEnemy->getMaxHealth());
             ui->enemyHealthBar->setValue(currentEnemy->getHealth());
-            ui->textEdit->setText("Turn " + QConvert::convertToString(battleTurn) +
+            ui->textEdit->setText(QConvert::convert(currentEnemy->getLongDescription()));
+            ui->statusBar->setText("Turn " + QConvert::convertToString(battleTurn) +
+                                  "\n" + enemyName + " entered next phase"
                                   "\nyou dealt " + QConvert::convertToString(inDmg) + " damage to " + enemyName +
                                   "\n" + enemyName + " dealt " + QConvert::convertToString(currentEnemy->getDmg()) + " damage to you\n");
             battleTurn++;
@@ -269,7 +274,8 @@ void MainWindow::atkEnemy(int inDmg)
             ui->playerHealthBar->setValue(0);
             gameOverState();
         } else {
-            ui->textEdit->setText("Turn " + QConvert::convertToString(battleTurn) +
+            ui->textEdit->setText(QConvert::convert(currentEnemy->getLongDescription()));
+            ui->statusBar->setText("Turn " + QConvert::convertToString(battleTurn) +
                                   "\nyou dealt " + QConvert::convertToString(inDmg) + " damage to " + enemyName +
                                   "\n" + enemyName + " dealt " + QConvert::convertToString(currentEnemy->getDmg()) + " damage to you\n");
             battleTurn++;
@@ -303,7 +309,8 @@ void MainWindow::useItem(Item item)
             ui->playerHealthBar->setValue(0);
             gameOverState();
         } else {
-            ui->textEdit->setText("Turn " + QConvert::convertToString(battleTurn) +
+            ui->textEdit->setText(QConvert::convert(currentEnemy->getLongDescription()));
+            ui->statusBar->setText("Turn " + QConvert::convertToString(battleTurn) +
                                   "\nyou healed for " + QConvert::convertToString(item.getHealing()) + " health points\n" +
                                   "\n" + enemyName + " dealt " + QConvert::convertToString(currentEnemy->getDmg()) + " damage to you\n");
             battleTurn++;
@@ -396,7 +403,7 @@ void MainWindow::on_northButton_clicked()
             mainChar.addItems((currentRoom->getItems())[0]);
             currentRoom->removeItem(0);
             moveState();
-            printRoomDetails();
+            showRoomDetails();
             break;
         case 32:
             //blank
@@ -405,13 +412,13 @@ void MainWindow::on_northButton_clicked()
             mainChar.addItems((currentRoom->getItems())[0]);
             currentRoom->removeItem(0);
             moveState();
-            printRoomDetails();
+            showRoomDetails();
             break;
         case 34:
             mainChar.addItems((currentRoom->getItems())[0]);
             currentRoom->removeItem(0);
             moveState();
-            printRoomDetails();
+            showRoomDetails();
             break;
         case 4:
             //blank
@@ -436,7 +443,8 @@ void MainWindow::on_southButton_clicked()
         case 1:
             currentRoom = previousRoom;
             moveState();
-            ui->textEdit->setText("you ran away\n\n" + getRoomDetails());
+            showRoomDetails();
+            ui->statusBar->setText("you ran away");
             break;
         case 2:
             if(currentItem < charItems.size() - 1) currentItem++;
@@ -455,7 +463,7 @@ void MainWindow::on_southButton_clicked()
             mainChar.addItems((currentRoom->getItems())[3]);
             currentRoom->removeItem(3);
             moveState();
-            printRoomDetails();
+            showRoomDetails();
             break;
         case 4:
             //blank
@@ -485,15 +493,17 @@ void MainWindow::on_eastButton_clicked()
                 showInventory();
                 battleInventoryState();
             } else {
-                ui->textEdit->setText("your inventory is empty\n\n" + QConvert::convert(currentEnemy->getLongDescription()));
+                ui->textEdit->setText(QConvert::convert(currentEnemy->getLongDescription()));
+                ui->statusBar->setText("your inventory is empty");
             }
 
             break;
         case 2:
             //moveState();
             if(charItems[currentItem].getWeaponCheck()){
-                ui->textEdit->setText(QConvert::convert(mainChar.equipWeapon(currentItem)) + "\n\n"
-                                      + getInventory());
+                showRoomDetails();
+                ui->statusBar->setText(QConvert::convert(mainChar.equipWeapon(currentItem)));
+                moveState();
             } else if (charItems[currentItem].getHealing() > 0){
                 heal(charItems[currentItem]);
                 int healed = charItems[currentItem].getHealing();
@@ -503,16 +513,16 @@ void MainWindow::on_eastButton_clicked()
                 if(charItems.size() <=1)
                 {
                     moveState();
-                    ui->textEdit->setText("you healed for " + QConvert::convertToString(healed) + " health points \n\n"
-                                           + getRoomDetails());
+                    showRoomDetails();
+                    ui->statusBar->setText("you healed for " + QConvert::convertToString(healed) + " health points");
                 } else {
-                    ui->textEdit->setText("you healed for " + QConvert::convertToString(healed) + " health points \n\n"
-                                           + getInventory());
+                    showInventory();
+                    ui->statusBar->setText("you healed for " + QConvert::convertToString(healed) + " health points");
                 }
 
             } else if (charItems[currentItem].getDmg() > 0){
-                ui->textEdit->setText("you can only use this during a battle\n\n"
-                                      + getInventory());
+                showInventory();
+                ui->statusBar->setText("you can only use this during a battle");
             }
 
             break;
@@ -523,19 +533,19 @@ void MainWindow::on_eastButton_clicked()
             mainChar.addItems((currentRoom->getItems())[1]);
             currentRoom->removeItem(1);
             moveState();
-            printRoomDetails();
+            showRoomDetails();
             break;
         case 33:
             mainChar.addItems((currentRoom->getItems())[2]);
             currentRoom->removeItem(2);
             moveState();
-            printRoomDetails();
+            showRoomDetails();
             break;
         case 34:
             mainChar.addItems((currentRoom->getItems())[2]);
             currentRoom->removeItem(2);
             moveState();
-            printRoomDetails();
+            showRoomDetails();
             break;
         case 4:
             //blank
@@ -561,8 +571,8 @@ void MainWindow::on_westButton_clicked()
             break;
         case 2:
             moveState();
-            ui->textEdit->setText(QConvert::convert(charItems[currentItem].getLongDescription()) + "\n\n"
-                                  + getRoomDetails());
+            showRoomDetails();
+            ui->statusBar->setText(QConvert::convert(charItems[currentItem].getLongDescription()));
             break;
         case 31:
             //blank
@@ -571,19 +581,19 @@ void MainWindow::on_westButton_clicked()
             mainChar.addItems((currentRoom->getItems())[0]);
             currentRoom->removeItem(0);
             moveState();
-            printRoomDetails();
+            showRoomDetails();
             break;
         case 33:
             mainChar.addItems((currentRoom->getItems())[1]);
             currentRoom->removeItem(1);
             moveState();
-            printRoomDetails();
+            showRoomDetails();
             break;
         case 34:
             mainChar.addItems((currentRoom->getItems())[1]);
             currentRoom->removeItem(1);
             moveState();
-            printRoomDetails();
+            showRoomDetails();
             break;
         case 4:
             //blank
@@ -602,16 +612,22 @@ void MainWindow::on_pickUpButton_clicked()
     switch (state)
     {
         case 0:
-            selectItems((currentRoom->getItems()).size());
-            if ((currentRoom->getItems()).size() > 0) ui->InventoryButton->setText("Cancel");
+            if ((currentRoom->getItems()).size() > 0)
+            {
+                selectItems((currentRoom->getItems()).size());
+                   ui->InventoryButton->setText("Cancel");
+            } else {
+                ui->statusBar->setText("no items in room");
+            }
+
             break;
         case 1:
             //blank
             break;
         case 2:
             currentRoom->addItem(charItems[currentItem]);
-            ui->textEdit->setText("dropped " + QConvert::convert(charItems[currentItem].getShortDescription()) + "\n\n"
-                                  + getRoomDetails());
+            showRoomDetails();
+            ui->statusBar->setText("dropped " + QConvert::convert(charItems[currentItem].getShortDescription()));
             mainChar.removeItem(currentItem);
             moveState();
 
@@ -625,7 +641,8 @@ void MainWindow::on_pickUpButton_clicked()
                 useItem(charItems[currentItem]);
                 mainChar.removeItem(currentItem);
             } else {
-                ui->textEdit->setText("cannot use this item\n" + getInventory());
+                showInventory();
+                ui->statusBar->setText("cannot use this item");
             }
             break;
         //default:
@@ -639,39 +656,48 @@ void MainWindow::on_InventoryButton_clicked()
     switch (state)
     {
         case 0:
-            currentItem = 0;
-            charItems = mainChar.getItems();
-            showInventory();
-            inventoryState();
+            if(mainChar.getItems().size() > 0)
+            {
+                currentItem = 0;
+                charItems = mainChar.getItems();
+                showInventory();
+                inventoryState();
+            } else {
+                showRoomDetails();
+                ui->statusBar->setText("your inventory is empty");
+            }
+
             break;
         case 1:
             ///blank
             break;
         case 2:
+            ui->statusBar->setText(" ");
             moveState();
-            printRoomDetails();
+            showRoomDetails();
             break;
         case 31:
             moveState();
-            printRoomDetails();
+            showRoomDetails();
             break;
         case 32:
             moveState();
-            printRoomDetails();
+            showRoomDetails();
             break;
         case 33:
             moveState();
-            printRoomDetails();
+            showRoomDetails();
             break;
         case 34:
             moveState();
-            printRoomDetails();
+            showRoomDetails();
             break;
         case 4:
             exit(0);
             break;
         case 5:
             fightState();
+            ui->statusBar->setText(" ");
             ui->textEdit->setText(QConvert::convert(currentEnemy->getLongDescription()));
             break;
         //default:

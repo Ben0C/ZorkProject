@@ -19,8 +19,8 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>571</width>
-      <height>381</height>
+      <width>561</width>
+      <height>301</height>
      </rect>
     </property>
     <property name="acceptRichText">
@@ -34,9 +34,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>400</y>
+      <y>450</y>
       <width>381</width>
-      <height>171</height>
+      <height>121</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -87,9 +87,9 @@
     <property name="geometry">
      <rect>
       <x>410</x>
-      <y>400</y>
-      <width>171</width>
-      <height>171</height>
+      <y>450</y>
+      <width>161</width>
+      <height>121</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
@@ -144,12 +144,23 @@
      <string>%v/%m</string>
     </property>
    </widget>
+   <widget class="QTextEdit" name="statusBar">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>350</y>
+      <width>561</width>
+      <height>85</height>
+     </rect>
+    </property>
+   </widget>
    <zorder>label</zorder>
-   <zorder>textEdit</zorder>
    <zorder>gridLayoutWidget</zorder>
    <zorder>gridLayoutWidget_2</zorder>
    <zorder>enemyHealthBar</zorder>
    <zorder>playerHealthBar</zorder>
+   <zorder>statusBar</zorder>
+   <zorder>textEdit</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
