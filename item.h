@@ -14,18 +14,18 @@ private:
     // value;
 	bool weaponCheck;
     int dmg;
+    int healing;
 
 public:
-    Item (string description = "unknown", int inWeight = 5, int dmg = 1, bool isWeapon = false);
+    Item (string inDescription = "unknown", int inWeight = 5, int inDmg = 0, int inHealing = 0, bool isWeapon = false);
     Item (const Item& item);
 	string getShortDescription();
     string getLongDescription();
 	int getWeight();
 	void setWeight(int weightGrams);
-    //float getValue();
-    //void setValue(float value);
+    int getDmg();
+    int getHealing();
 	int getWeaponCheck();
-    //void setWeaponCheck(bool weaponCheck);
     bool operator == (Item item)
     {
         if(weightGrams == item.getWeight() && weaponCheck == item.getWeaponCheck() && description == item.getShortDescription())

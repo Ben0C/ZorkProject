@@ -1,15 +1,23 @@
 #include "enemy.h"
 
-Enemy::Enemy(string name, string description, int health, int dmg, int expGain)
-    :name(name), description(description), health(health), dmg(dmg), expGain(expGain)
+Enemy::Enemy(string inName, string inDescription, int inHealth, int inDmg, int inExpGain)
+    :name(inName), description(inDescription), health(inHealth), dmg(inDmg), expGain(inExpGain)
 {  
     numOfEnemies++;
+    longDescription = (this->name + "\nhealth: " + to_string(this->health));
+    maxHealth = inHealth;
 }
 
 void Enemy::slain()
 {
     numOfEnemies--;
 }
+
+void Enemy::reduceHealth(int atkDmg){
+    health -= atkDmg;
+}
+
+//mutator methods -------------------------
 
 int Enemy::getNumOfEnemies()
 {
@@ -31,9 +39,19 @@ string Enemy::getDescription()
     return description;
 }
 
+string Enemy::getLongDescription()
+{
+    return longDescription;
+}
+
 int Enemy::getHealth()
 {
     return health;
+}
+
+int Enemy::getMaxHealth()
+{
+    return maxHealth;
 }
 
 int Enemy::getDmg()
@@ -43,6 +61,11 @@ int Enemy::getDmg()
 int Enemy::getExpGain()
 {
     return expGain;
+}
+
+string Enemy::getType()
+{
+    return type;
 }
 
 void Enemy::setName(string name)

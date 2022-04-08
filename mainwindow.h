@@ -6,7 +6,7 @@
 #include "basicenemy.h"
 #include "Character.h"
 
-
+#include <QProgressBar>
 #include <QPixmap>
 #include <QShortcut>
 #include <QPixmap>
@@ -48,22 +48,32 @@ private:
 
     //Zork parts
     Character mainChar;
-    int currentItem;
     vector<Room*> rooms;
     vector<Item> charItems;
     Room *currentRoom;
+    Room *previousRoom;
+    Boss *floorBoss;
+    int currentItem;
+    Enemy *currentEnemy;
+    QString enemyName;
+    QString charDmg;
+    int battleTurn;
     int state; //0 move, 1 fight, 2 inventory, 3 selecting items
     Room* randomRoom();
     void createRooms();
-    void setShortcuts();
+    //void setShortcuts();
     void printWelcome();
     void printRoomDetails();
+    QString getRoomDetails();
     void printHelp();
     void goRoom(string direction);
-    void createItems();
+    //void createItems();
     void selectItems(int numOfItems);
     void showInventory();
-    void hideInventory();
+    QString getInventory();
+    void atkEnemy(int dmg = 0);
+    void useItem(Item item);
+    void heal(Item item);
     void displayItems();
     friend Room output(MainWindow mainwindow);
 
@@ -71,5 +81,10 @@ private:
     void moveState();
     void fightState();
     void inventoryState();
+    void gameOverState();
+    void battleInventoryState();
 };
+
+
+
 #endif // MAINWINDOW_H

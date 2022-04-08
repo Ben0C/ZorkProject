@@ -8,25 +8,31 @@ using namespace std;
 using std::vector;
 
 
-class Character {
+class Character
+{
 private:
     string description;
     vector <Item> itemsInCharacter;
     int health;
+    int maxHealth;
     Item weapon;
+    int dmg;
 
 public:
-    Character(string description = "no description given", int health = 5, Item weapon = Item("stick", 1, 1, true));
+    Character(string inDescription = "no description given", int inHealth = 5, Item inWeapon = Item("stick", 1, 1, true));
     ~Character();
 	string shortDescription();
 	string longDescription();
     void addItems(Item &item);
     void addItems(Item *item);
     void removeItem(int arrNum);
+    void reduceHealth(int atkDmg);
     string equipWeapon(int arrNum);
     vector<Item> getItems();
     int getHealth();
+    int getMaxHealth();
     Item getWeapon();
+    int getDmg();
     void setHealth(int health);
     void setWeapon(Item weapon);
 };

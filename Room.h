@@ -4,6 +4,9 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "enemy.h"
+#include "basicenemy.h"
+#include "boss.h"
 #include "item.h"
 using namespace std;
 using std::vector;
@@ -15,12 +18,19 @@ private:
 	map<string, Room*> exits;
 	string exitString();
     vector <Item> itemsInRoom;
+    Enemy enemy;
+    bool hasEnemy;
+
 
 
 public:
     int numberOfItems();
     Room(string description = "no description given");
 	void setExits(Room *north, Room *east, Room *south, Room *west);
+    void setEnemy(Enemy enemy);
+    void removeEnemy();
+    bool checkForEnemy();
+    Enemy* getEnemy();
     string shortDescription();
     string longDescription();
 	Room* nextRoom(string direction);

@@ -1,6 +1,6 @@
 #include "item.h"
-Item::Item (string inDescription, int inWeightGrams, int inDmg, bool isWeapon)
-    :description(inDescription), weightGrams(inWeightGrams), dmg(inDmg), weaponCheck(isWeapon)
+Item::Item (string inDescription, int inWeightGrams, int inDmg, int inHealing, bool isWeapon)
+    :description(inDescription), weightGrams(inWeightGrams), dmg(inDmg), healing(inHealing), weaponCheck(isWeapon)
 {
     if(weaponCheck)
     {
@@ -8,30 +8,41 @@ Item::Item (string inDescription, int inWeightGrams, int inDmg, bool isWeapon)
         longDescription = ("name: " + description
                            + ".\nweight: " + std::to_string(weightGrams)
                            + ".\ndmg: " + std::to_string(dmg)
-                           + "------------------------------------");
-    }
-    else
-    {
-        description += " *ITEM*";
+                           + ".\n------------------------------------");
+    } else if(dmg > 0) {
+        description += " *THROWABLE*";
         longDescription = ("name: " + description
                            + ".\nweight: " + std::to_string(weightGrams)
-                           + "------------------------------------");
+                           + ".\ndmg: " + std::to_string(dmg)
+                           + ".\n------------------------------------");
+    } else if(healing > 0) {
+        description += " *CONSUMEABLE*";
+        longDescription = ("name: " + description
+                           + ".\nweight: " + std::to_string(weightGrams)
+                           + ".\nhealing: " + std::to_string(healing)
+                           + ".\n------------------------------------");
     }
 }
 
 Item::Item(const Item& item)
-    :description(item.description), weightGrams(item.weightGrams), weaponCheck(item.weaponCheck), dmg(item.dmg)
+    :description(item.description), weightGrams(item.weightGrams), dmg(item.dmg), healing(item.healing), weaponCheck(item.weaponCheck)
 {
     if(weaponCheck)
     {
         longDescription = ("name: " + description
                            + ".\nweight: " + std::to_string(weightGrams)
-                           + ".\ndmg: " + std::to_string(dmg));
-    }
-    else
-    {
+                           + ".\ndmg: " + std::to_string(dmg)
+                           + ".\n------------------------------------");
+    } else if(dmg > 0) {
         longDescription = ("name: " + description
-                           + ".\nweight: " + std::to_string(weightGrams));
+                           + ".\nweight: " + std::to_string(weightGrams)
+                           + ".\ndmg: " + std::to_string(dmg)
+                           + ".\n------------------------------------");
+    } else if(healing > 0) {
+        longDescription = ("name: " + description
+                           + ".\nweight: " + std::to_string(weightGrams)
+                           + ".\nhealing: " + std::to_string(healing)
+                           + ".\n------------------------------------");
     }
 }
 
@@ -43,32 +54,6 @@ void Item::setWeight(int inWeightGrams)
     else
 	   weightGrams = inWeightGrams;
 }
-
-/*
-void Item::setValue(float inValue)
-{
-    if (inValue > 9999 || inValue < 0)
-       cout << "value invalid, must be 0<value<9999" ;
-    else
-	   value = inValue;
-}
-*/
-
-/*
-void Item::setWeaponCheck(bool isWeapon)
-{
-    if(isWeapon)
-    {
-        weaponCheck = true;
-        description += "\n*WEAPON*";
-    }
-    else
-    {
-        description += "\n*ITEM*";
-    }
-
-}
-*/
 
 string Item::getShortDescription()
 {
@@ -85,12 +70,15 @@ int Item::getWeight()
     return weightGrams;
 }
 
-/*
-float Item::getValue()
+int Item::getDmg()
 {
-    return value;
+    return dmg;
 }
-*/
+
+int Item::getHealing()
+{
+    return healing;
+}
 
 int Item::getWeaponCheck()
 {

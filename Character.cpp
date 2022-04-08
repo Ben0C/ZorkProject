@@ -1,9 +1,10 @@
 #include "Character.h"
 
-Character::Character(string description, int health, Item weapon)
-    : description(description), health(health), weapon(weapon)
+Character::Character(string inDescription, int inHealth, Item inWeapon)
+    : description(inDescription), health(inHealth), weapon(inWeapon)
 {
-
+    dmg = weapon.getDmg();
+    maxHealth = inHealth;
 }
 
 Character::~Character()
@@ -26,6 +27,10 @@ void Character::removeItem(int arrNum)
     itemsInCharacter.erase(itemsInCharacter.begin() + arrNum);
 }
 
+void Character::reduceHealth(int atkDmg){
+    health -= atkDmg;
+}
+
 string Character::equipWeapon(int arrNum)
 {
     if(arrNum >= 0 && arrNum < itemsInCharacter.size())
@@ -34,6 +39,7 @@ string Character::equipWeapon(int arrNum)
         {
             itemsInCharacter.push_back(getWeapon());
             setWeapon(itemsInCharacter[arrNum]);
+            dmg = itemsInCharacter[arrNum].getDmg();
             itemsInCharacter.erase(itemsInCharacter.begin() + arrNum);
             return getWeapon().getShortDescription() + " equipped";
         }else{
@@ -56,14 +62,26 @@ string Character::longDescription()
   return ret;
 }
 
+//mutator methods----------------------------------------------
+
 int Character::getHealth()
 {
     return health;
 }
 
+int Character::getMaxHealth()
+{
+    return maxHealth;
+}
+
 Item Character::getWeapon()
 {
     return weapon;
+}
+
+int Character::getDmg()
+{
+    return dmg;
 }
 
 vector<Item> Character::getItems()

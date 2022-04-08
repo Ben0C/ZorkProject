@@ -3,7 +3,8 @@
 
 
 Room::Room(string description) {
-	this->description = description;
+    this->description = description;
+    hasEnemy = false;
 }
 
 void Room::setExits(Room *north, Room *east, Room *south, Room *west) {
@@ -15,6 +16,26 @@ void Room::setExits(Room *north, Room *east, Room *south, Room *west) {
 		exits["south"] = south;
 	if (west != NULL)
 		exits["west"] = west;
+}
+
+bool Room::checkForEnemy()
+{
+    return hasEnemy;
+}
+
+void Room::setEnemy(Enemy enemy)
+{
+    this->enemy = enemy;
+    hasEnemy = true;
+}
+
+Enemy* Room::getEnemy(){
+    return &enemy;
+}
+
+void Room::removeEnemy()
+{
+    hasEnemy = false;
 }
 
 string Room::shortDescription() { return description; }
