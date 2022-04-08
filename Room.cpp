@@ -6,6 +6,10 @@ Room::Room(string description) {
     this->description = description;
     hasEnemy = false;
 }
+Room::~Room()
+{
+    delete ptrEnemy;
+}
 
 void Room::setExits(Room *north, Room *east, Room *south, Room *west) {
 	if (north != NULL)
@@ -27,6 +31,7 @@ void Room::setEnemy(Enemy enemy)
 {
     this->enemy = enemy;
     hasEnemy = true;
+    ptrEnemy = &enemy;
 }
 
 Enemy* Room::getEnemy(){

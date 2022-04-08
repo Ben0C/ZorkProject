@@ -4,11 +4,13 @@
 #include <string>
 using namespace std;
 #include "enemy.h"
+#include "alive.h"
 
-class Boss : public Enemy
+class Boss : public Enemy, public Alive
 {
 private:
     int phases;
+    bool alive;
 
 public:
     inline static int numOfBosses;
@@ -17,6 +19,7 @@ public:
 
     Boss(int phases, string inName = "unknown", string inDescription = "unknown", int inHealth = 1, int inDmg = 1, int inExpGain = 0);
     void slain();
+    void isAlive();
     int getPhases();
     void setPhases(int num);
 };

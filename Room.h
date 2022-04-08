@@ -19,6 +19,7 @@ private:
 	string exitString();
     vector <Item> itemsInRoom;
     Enemy enemy;
+    Enemy* ptrEnemy;
     bool hasEnemy;
 
 
@@ -26,6 +27,7 @@ private:
 public:
     int numberOfItems();
     Room(string description = "no description given");
+    ~Room();
 	void setExits(Room *north, Room *east, Room *south, Room *west);
     void setEnemy(Enemy enemy);
     void removeEnemy();

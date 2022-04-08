@@ -21,6 +21,7 @@ SOURCES += \
 HEADERS += \
     Character.h \
     Room.h \
+    alive.h \
     basicenemy.h \
     boss.h \
     enemy.h \

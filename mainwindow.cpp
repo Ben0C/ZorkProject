@@ -7,6 +7,8 @@ using namespace std;
 #define map "../ZorkProject/Images/ZorkMap.png"
 #define mapCharacter "../ZorkProject/Images/MapCharacter.png"
 
+extern int playerHealth;
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -24,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     Enemy::setNumOfEnemies(0);
     Boss::setNumOfBosses(0);
-    mainChar = Character("You", 50);
+    mainChar = Character("You", playerHealth);
     ui->playerHealthBar->setMaximum(mainChar.getHealth());
     ui->playerHealthBar->setValue(mainChar.getHealth());
     createRooms();
@@ -783,15 +785,13 @@ void MainWindow::on_inventoryButton_clicked()
 
 //other implementations --------------------------------------------------
 
-template<typename T>
-T templateTest(T x, T y)
+struct test
 {
-    T temp;
-    temp = x;
-    x = y;
-    y = temp;
-    T & reference = temp;
-}
+    int bit1 : 1;
+    int bit2 : 1;
+} num1;
+
+
 
 
 

@@ -32,3 +32,8 @@ void Boss::setPhases(int num)
 {
     phases = num;
 }
+
+void Boss::isAlive()
+{
+    alive = true;
+}

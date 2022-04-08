@@ -13,4 +13,7 @@ void BasicEnemy::slain()
     numOfEnemies--;
 }
 
-
+void BasicEnemy::isAlive()
+{
+    Alive = true;
+}
