@@ -84,7 +84,7 @@ void MainWindow::createRooms()  {
     d = new Room();
     e = new Room();
         e->addItem(Item("sword", 10, 5, 0, true, false));
-        //e->setEnemy(BasicEnemy("bat", "the bat flies about aimlessly", 5, 2, 3));
+        e->setEnemy(BasicEnemy("bat", "the bat flies about aimlessly", 5, 2, 3));
     f = new Room();
     g = new Room();
     h = new Room();
