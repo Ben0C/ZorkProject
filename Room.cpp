@@ -2,8 +2,9 @@
 //#include "Command.h"
 
 
-Room::Room(string description) {
-    this->description = description;
+Room::Room(string inDescription)
+    :description(inDescription)
+{
     hasEnemy = false;
 }
 Room::~Room()
@@ -45,10 +46,10 @@ void Room::removeEnemy()
 
 string Room::shortDescription() { return description; }
 
-string Room::longDescription() { return "room = " + description + ".\n" + displayItem() + exitString(); }
+string Room::longDescription() { return "room: " + description + ".\n" + displayItem() + exitString(); }
 
 string Room::exitString() {
-	string returnString = "\nexits =";
+    string returnString = "\nexits: ";
 	for (map<string, Room*>::iterator i = exits.begin(); i != exits.end(); i++)
 		// Loop through map
 		returnString += "  " + i->first;	// access the "first" element of the pair (direction as a string)
@@ -81,7 +82,7 @@ void Room::removeItem(int arrNum)
 }
 
 string Room::displayItem() {
-    string tempString = "items in room = \n";
+    string tempString = "items in room: \n";
     int sizeItems = (itemsInRoom.size());
     if (itemsInRoom.size() < 1) {
         tempString = "no items in room";
@@ -98,6 +99,7 @@ string Room::displayItem() {
 
 inline int Room::numberOfItems() { return itemsInRoom.size(); }
 
+/*
 int Room::isItemInRoom(string inString)
 {
     int sizeItems = (itemsInRoom.size());
@@ -118,7 +120,7 @@ int Room::isItemInRoom(string inString)
         }
     return -1;
 }
-
+*/
 vector<Item> Room::getItems()
 {
     return itemsInRoom;

@@ -12,9 +12,12 @@
 #include <QPixmap>
 #include <QShortcut>
 #include <QObject>
+#include <fstream>
 #include <iostream>
 #include <string>
 using namespace std;
+
+using std::ifstream;
 
 #include <QMainWindow>
 
@@ -47,44 +50,53 @@ private:
     Ui::MainWindow *ui;
 
     //Zork parts
-    Character mainChar;
-    void moveCharIcon(string direction);
+
     vector<Room*> rooms;
     vector<Item> charItems;
     Room *currentRoom;
     Room *previousRoom;
     Boss *floorBoss;
     int currentItem;
+    int currentLetter;
     Enemy *currentEnemy;
     string directionToMove;
     QString enemyName;
     QString charDmg;
     int battleTurn;
-    int state; //0 move, 1 fight, 2 inventory, 3 selecting items
-    Room* randomRoom();
+
+    //wordle parts
+    Character mainChar;
+    char letters[26];
+    string wordleWords[6];
+    vector<string> previousGuesses;
+    string currentGuess;
+    int currentWord;
+    string displayPreviousGuesses();
+    void compareWords();
+
     void createRooms();
     void setShortcuts();
     void printWelcome();
     void showRoomDetails();
-    QString getRoomDetails();
-    void printHelp();
+    void moveCharIcon(string direction);
     void goRoom(string direction);
-    //void createItems();
     void selectItems(int numOfItems);
     void showInventory();
-    QString getInventory();
     void atkEnemy(int dmg = 0);
     void useItem(Item item);
     void heal(Item item);
     void displayItems();
+    void displayLetters();
     friend Room output(MainWindow mainwindow);
 
     //states
+    int state; //0 move, 1 fight, 2 inventory, 3 selecting items
     void moveState();
     void fightState();
     void inventoryState();
     void gameOverState();
     void battleInventoryState();
+    void wordleState();
 };
 
 

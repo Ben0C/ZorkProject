@@ -35,6 +35,7 @@ public:
     string getType();
     void setName(string name);
     void setDescription(string description);
+    void setLongDescription(string inName, int inDmg, string inDescription);
     void setHealth(int health);
     void setDmg(int dmg);
     void setExpGain(int expGain);

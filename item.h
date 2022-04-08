@@ -11,7 +11,6 @@ private:
 	string description;
 	string longDescription;
 	int weightGrams;
-    // value;
     int dmg;
     int healing;
 	bool weaponCheck;

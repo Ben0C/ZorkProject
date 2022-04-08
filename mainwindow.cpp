@@ -24,6 +24,24 @@ MainWindow::MainWindow(QWidget *parent)
     ui->enemyHealthBar->setStyleSheet("QProgressBar::chunk {background: red}");
     ui->playerHealthBar->setStyleSheet("QProgressBar::chunk {background: green}");
 
+    char letter = 'a';
+    for(int i = 0 ; i < 26; i++)
+    {
+        letters[i] = letter;
+        letter++;
+    }
+
+    ifstream in;
+    string word;
+    in.open("../ZorkProject/Wordle.txt");
+    int count = 0;
+    while (std::getline(in, word))
+    {
+        wordleWords[count] = word;
+        count++;
+    }
+    in.close();
+
     Enemy::setNumOfEnemies(0);
     Boss::setNumOfBosses(0);
     mainChar = Character("You", playerHealth);
@@ -66,7 +84,7 @@ void MainWindow::createRooms()  {
     d = new Room();
     e = new Room();
         e->addItem(Item("sword", 10, 5, 0, true, false));
-        e->setEnemy(BasicEnemy("bat", "the bat flies about aimlessly", 5, 2, 3));
+        //e->setEnemy(BasicEnemy("bat", "the bat flies about aimlessly", 5, 2, 3));
     f = new Room();
     g = new Room();
     h = new Room();
@@ -77,7 +95,7 @@ void MainWindow::createRooms()  {
     k = new Room();
     l = new Room();
         l->addItem(Item("trophie", 10, 50, 0, true, false));
-        Boss *fBoss = new Boss(2, "grog", "grog is groging about menacingly", 30, 5, 20);
+        Boss *fBoss = new Boss(2, "grog", "grog is groging about menacingly", 30, 7, 20);
         floorBoss = dynamic_cast<Boss*>(fBoss);
         l->setEnemy(*floorBoss);
     f1 = new Room();
@@ -100,6 +118,12 @@ void MainWindow::createRooms()  {
         m2->addItem(Item("greater potion", 2, 0, 30, false, false));
     i3 = new Room();
     j3 = new Room();
+        j3->addItem(Item("please", 1, 0, 50, false, false));
+        j3->addItem(Item("please", 1, 0, 50, false, false));
+        j3->addItem(Item("please", 1, 0, 50, false, false));
+        j3->setEnemy(BasicEnemy("word eater", "devourer of words\n\nword 1/6 \nenter a 5 letter word: " + currentGuess +
+                                "\n\nprevious guesses :\n" + displayPreviousGuesses() +
+                                "\n+ = correct position\n* = letter in wrong position\n- = letter not in word\n\n(warning: some of the words are two words, eg. afish)", 600, 2, 50));
     k3 = new Room();
         k3->addItem(Item("axe", 20, 17, 0, true, false));
     j4 = new Room();
@@ -172,17 +196,12 @@ void MainWindow::setShortcuts(){
 inline void MainWindow::printWelcome()
 {
     showRoomDetails();
-    ui->statusBar->setText("you can control the buttons with your keyboard\nDirectional buttons = WASD\nPick Up = Q\nInventory = E");
+    ui->statusBar->setText("you can control the buttons with your keyboard\ndirectional buttons = WASD\npick up = Q\ninventory = E");
 }
 
 inline void MainWindow::showRoomDetails()
 {
     ui->textEdit->setText(QConvert::convert(currentRoom->longDescription()));
-}
-
-inline QString MainWindow::getRoomDetails()
-{
-    return QConvert::convert(currentRoom->longDescription());
 }
 
 void MainWindow::moveCharIcon(string direction)
@@ -215,7 +234,6 @@ void MainWindow::goRoom(string direction) {
         if(currentRoom->checkForEnemy())
         {
             directionToMove = direction;
-            fightState();
             battleTurn = 0;
             currentEnemy = currentRoom->getEnemy();
             ui->enemyHealthBar->setMaximum(currentEnemy->getMaxHealth());
@@ -223,6 +241,7 @@ void MainWindow::goRoom(string direction) {
             enemyName = QConvert::convert(currentEnemy->getName());
             charDmg = QConvert::convertToString(mainChar.getDmg());
             ui->textEdit->setText(QConvert::convert(currentEnemy->getLongDescription()));
+            (currentEnemy->getName() == "word eater")? wordleState() : fightState();
             return;
         }
         moveCharIcon(direction);
@@ -243,54 +262,6 @@ void MainWindow::showInventory()
         itemList += ("  " + (charItems[i]).getShortDescription() + "\n");
     }
     ui->textEdit->setText(QConvert::convert(itemList));
-}
-
-QString MainWindow::getInventory()
-{
-    string itemList = "";
-    for(int i = 0; i < charItems.size(); i++)
-    {
-        if(i == currentItem){
-            itemList += "->";
-        }
-        itemList += ("  " + (charItems[i]).getShortDescription() + "\n");
-    }
-    return QConvert::convert(itemList);
-}
-
-void MainWindow::selectItems(int numOfItems)
-{
-    switch (numOfItems){
-        case 0:
-            break;
-        case 1:
-            state = 31;
-            ui->northButton->setText(QConvert::convert((currentRoom->getItems())[0].getShortDescription()));
-            ui->southButton->setText("");
-            ui->eastButton->setText("");
-            ui->westButton->setText("");
-            break;
-        case 2:
-            state = 32;
-            ui->northButton->setText("");
-            ui->southButton->setText("");
-            ui->eastButton->setText(QConvert::convert((currentRoom->getItems())[1].getShortDescription()));
-            ui->westButton->setText(QConvert::convert((currentRoom->getItems())[0].getShortDescription()));
-            break;
-        case 3:
-            state = 33;
-            ui->northButton->setText(QConvert::convert((currentRoom->getItems())[0].getShortDescription()));
-            ui->southButton->setText("");
-            ui->eastButton->setText(QConvert::convert((currentRoom->getItems())[2].getShortDescription()));
-            ui->westButton->setText(QConvert::convert((currentRoom->getItems())[1].getShortDescription()));
-            break;
-        default:
-            state = 34;
-            ui->northButton->setText(QConvert::convert((currentRoom->getItems())[0].getShortDescription()));
-            ui->southButton->setText(QConvert::convert((currentRoom->getItems())[3].getShortDescription()));
-            ui->eastButton->setText(QConvert::convert((currentRoom->getItems())[2].getShortDescription()));
-            ui->westButton->setText(QConvert::convert((currentRoom->getItems())[1].getShortDescription()));
-    }
 }
 
 void MainWindow::atkEnemy(int inDmg)
@@ -329,13 +300,23 @@ void MainWindow::atkEnemy(int inDmg)
             floorBoss->setPhases(floorBoss->getPhases() - 1);
             currentEnemy->setHealth(currentEnemy->getMaxHealth());
             ui->enemyHealthBar->setValue(currentEnemy->getHealth());
-            ui->textEdit->setText(QConvert::convert(currentEnemy->getLongDescription()));
-            ui->statusBar->setText("Turn " + QConvert::convertToString(battleTurn) +
-                                  "\n" + enemyName + " entered next phase"
-                                  "\nyou dealt " + QConvert::convertToString(inDmg) + " damage to " + enemyName +
-                                  "\n" + enemyName + " dealt " + QConvert::convertToString(currentEnemy->getDmg()) + " damage to you\n");
-            battleTurn++;
-            fightState();
+            mainChar.reduceHealth(currentEnemy->getDmg());
+            ui->playerHealthBar->setValue(mainChar.getHealth());
+            if(mainChar.getHealth() < 1)
+            {
+                ui->textEdit->setText("Game Over");
+                ui->playerHealthBar->setValue(0);
+                gameOverState();
+            } else {
+                ui->textEdit->setText(QConvert::convert(currentEnemy->getLongDescription()));
+                ui->statusBar->setText("Turn " + QConvert::convertToString(battleTurn) +
+                                      "\n" + enemyName + " entered next phase"
+                                      "\nyou dealt " + QConvert::convertToString(inDmg) + " damage to " + enemyName +
+                                      "\n" + enemyName + " dealt " + QConvert::convertToString(currentEnemy->getDmg()) + " damage to you\n");
+                battleTurn++;
+                fightState();
+            }
+
         }
 
 
@@ -354,9 +335,8 @@ void MainWindow::atkEnemy(int inDmg)
                                   "\nyou dealt " + QConvert::convertToString(inDmg) + " damage to " + enemyName +
                                   "\n" + enemyName + " dealt " + QConvert::convertToString(currentEnemy->getDmg()) + " damage to you\n");
             battleTurn++;
-            fightState();
+            if(currentEnemy->getName() != "word eater") fightState();
         }
-
 
     }
 
@@ -395,13 +375,55 @@ void MainWindow::useItem(Item item)
 
 }
 
+//wordle functions -------------------------------------------------
 
+void MainWindow::displayLetters()
+{
+    char a = 'a';
+    string temp;
+    for(int i = 0; i < 26; i++)
+    {
+        (currentLetter == i)? temp += " ->": temp+= "     ";
+        temp = temp + a;
+        if(i == 8 || i == 17 || i == 26) temp += "\n";
+        a++;
+    }
+    ui->statusBar->setText(QConvert::convert(temp));
+}
+
+string MainWindow::displayPreviousGuesses()
+{
+    string temp;
+    for(int i = 0; i < previousGuesses.size(); i++)
+    {
+        temp += previousGuesses[i] + "\n";
+    }
+    return temp;
+}
+
+void MainWindow::compareWords()
+{
+    string temp;
+    for(int i = 0; i < 5; i++)
+    {
+        if(currentGuess.substr(i, 1) == (wordleWords[currentWord]).substr(i, 1))
+        {
+            temp = temp + " +" + currentGuess.substr(i, 1);
+        } else if(wordleWords[currentWord].find(currentGuess.substr(i, 1)) != std::string::npos) {
+            temp = temp + " *" + currentGuess.substr(i, 1);
+        } else {
+            temp = temp + " -" + currentGuess.substr(i, 1);
+        }
+    }
+    previousGuesses.push_back(temp);
+}
 
 //States ---------------------------
 
 void MainWindow::moveState()
 {
     state = 0;
+    ui->statusBar->setText(" ");
     ui->enemyHealthBar->setTextVisible(false);
     ui->enemyHealthBar->setValue(0);
     ui->northButton->setText("North" );
@@ -435,6 +457,41 @@ void MainWindow::inventoryState()
     ui->pickUpButton -> setText("Drop");
 }
 
+void MainWindow::selectItems(int numOfItems)
+{
+    switch (numOfItems){
+        case 0:
+            break;
+        case 1:
+            state = 31;
+            ui->northButton->setText(QConvert::convert((currentRoom->getItems())[0].getShortDescription()));
+            ui->southButton->setText("");
+            ui->eastButton->setText("");
+            ui->westButton->setText("");
+            break;
+        case 2:
+            state = 32;
+            ui->northButton->setText("");
+            ui->southButton->setText("");
+            ui->eastButton->setText(QConvert::convert((currentRoom->getItems())[1].getShortDescription()));
+            ui->westButton->setText(QConvert::convert((currentRoom->getItems())[0].getShortDescription()));
+            break;
+        case 3:
+            state = 33;
+            ui->northButton->setText(QConvert::convert((currentRoom->getItems())[0].getShortDescription()));
+            ui->southButton->setText("");
+            ui->eastButton->setText(QConvert::convert((currentRoom->getItems())[2].getShortDescription()));
+            ui->westButton->setText(QConvert::convert((currentRoom->getItems())[1].getShortDescription()));
+            break;
+        default:
+            state = 34;
+            ui->northButton->setText(QConvert::convert((currentRoom->getItems())[0].getShortDescription()));
+            ui->southButton->setText(QConvert::convert((currentRoom->getItems())[3].getShortDescription()));
+            ui->eastButton->setText(QConvert::convert((currentRoom->getItems())[2].getShortDescription()));
+            ui->westButton->setText(QConvert::convert((currentRoom->getItems())[1].getShortDescription()));
+    }
+}
+
 void MainWindow::gameOverState()
 {
     state = 4;
@@ -457,9 +514,26 @@ void MainWindow::battleInventoryState()
     ui->pickUpButton -> setText("Use");
 }
 
+void MainWindow::wordleState()
+{
+    state = 6;
+    currentWord = 0;
+    currentLetter = 0;
+    currentGuess = "";
+    previousGuesses.clear();
+    displayLetters();
+    ui->enemyHealthBar->setTextVisible(true);
+    ui->northButton->setText("up");
+    ui->southButton->setText("down");
+    ui->eastButton->setText("right");
+    ui->westButton->setText("left");
+    ui->inventoryButton->setText("delete");
+    ui->pickUpButton -> setText("enter");
+}
+
 //Buttons -------------------------
 
-//north, attack, up(inventory), itemselect, blank, up(battleinventory)
+//north, attack, up(inventory), itemselect, blank, up(battleinventory), up(wordle)
 void MainWindow::on_northButton_clicked()
 {
     switch (state)
@@ -480,9 +554,7 @@ void MainWindow::on_northButton_clicked()
             moveState();
             showRoomDetails();
             break;
-        case 32:
-            //blank
-            break;
+        //31 blank
         case 33:
             mainChar.addItems((currentRoom->getItems())[0]);
             currentRoom->removeItem(0);
@@ -495,19 +567,21 @@ void MainWindow::on_northButton_clicked()
             moveState();
             showRoomDetails();
             break;
-        case 4:
-            //blank
-            break;
+        // 4 blank
         case 5:
             if(currentItem > 0) currentItem--;
             showInventory();
             break;
+        case 6:
+            if(currentLetter - 9 > -1) currentLetter -= 9;
+            displayLetters();
+            break;
         default:
-            goRoom("north");
+            break;
     }
 }
 
-//south, run, down(inventory), itemselect, blank, down(battleinventory)
+//south, run, down(inventory), itemselect, blank, down(battleinventory), down(wordle)
 void MainWindow::on_southButton_clicked()
 {
     switch (state)
@@ -525,34 +599,29 @@ void MainWindow::on_southButton_clicked()
             if(currentItem < charItems.size() - 1) currentItem++;
             showInventory();
             break;
-        case 31:
-            //blank
-            break;
-        case 32:
-            //blank
-            break;
-        case 33:
-            //blank
-            break;
+        //31 blank
+        //32 blank
+        //33 blank
         case 34:
             mainChar.addItems((currentRoom->getItems())[3]);
             currentRoom->removeItem(3);
             moveState();
             showRoomDetails();
-            break;
-        case 4:
-            //blank
-            break;
+        //4 blank
         case 5:
             if(currentItem < charItems.size() - 1) currentItem++;
             showInventory();
             break;
+        case 6:
+            if(currentLetter + 9 < 26) currentLetter += 9;
+            displayLetters();
+            break;
         default:
-            goRoom("south");
+            break;
     }
 }
 
-//east, item, equip/use
+//east, item, equip/use, itemselect, blank, blank, right(wordle)
 void MainWindow::on_eastButton_clicked()
 {
     switch (state)
@@ -585,7 +654,7 @@ void MainWindow::on_eastButton_clicked()
                 mainChar.removeItem(currentItem);
                 charItems = mainChar.getItems();
                 currentItem = 0;
-                if(charItems.size() <=1)
+                if(charItems.size() <= 0)
                 {
                     moveState();
                     showRoomDetails();
@@ -601,9 +670,7 @@ void MainWindow::on_eastButton_clicked()
             }
 
             break;
-        case 31:
-            //blank
-            break;
+        //31 blank
         case 32:
             mainChar.addItems((currentRoom->getItems())[1]);
             currentRoom->removeItem(1);
@@ -622,18 +689,18 @@ void MainWindow::on_eastButton_clicked()
             moveState();
             showRoomDetails();
             break;
-        case 4:
-            //blank
-            break;
-        case 5:
-            //blank
+        //4 blank
+        //5 blank'
+        case 6:
+            if(currentLetter + 1 < 26) currentLetter += 1;
+            displayLetters();
             break;
         default:
-            goRoom("east");
+            break;
     }
 }
 
-//west, inspect, inspect(inventory)
+//west, inspect(combat), inspect(inventory), item select, blank, blank, left(wordle)
 void MainWindow::on_westButton_clicked()
 {
     switch (state)
@@ -649,9 +716,7 @@ void MainWindow::on_westButton_clicked()
             showRoomDetails();
             ui->statusBar->setText(QConvert::convert(charItems[currentItem].getLongDescription()));
             break;
-        case 31:
-            //blank
-            break;
+        //31 blank
         case 32:
             mainChar.addItems((currentRoom->getItems())[0]);
             currentRoom->removeItem(0);
@@ -670,18 +735,18 @@ void MainWindow::on_westButton_clicked()
             moveState();
             showRoomDetails();
             break;
-        case 4:
-            //blank
-            break;
-        case 5:
-            //blank
+        //4 blank
+        //5 blank
+        case 6:
+            if(currentLetter - 1 > -1) currentLetter -= 1;
+            displayLetters();
             break;
         default:
-            goRoom("west");
+            break;
     }
 }
 
-//pickup, blank, drop, blank, blank, use
+//pickup, blank, drop, blank, blank, use, enter(wordle)
 void MainWindow::on_pickUpButton_clicked()
 {
     switch (state)
@@ -697,9 +762,7 @@ void MainWindow::on_pickUpButton_clicked()
             }
 
             break;
-        case 1:
-            //blank
-            break;
+        //1 blank
         case 2:
             currentRoom->addItem(charItems[currentItem]);
             showRoomDetails();
@@ -708,9 +771,11 @@ void MainWindow::on_pickUpButton_clicked()
             moveState();
 
             break;
-        case 4:
-            //blank
-            break;
+        //31 blank
+        //32 blank
+        //33 blank
+        //34 blank
+        //4 blank
         case 5:
             if (!charItems[currentItem].getWeaponCheck())
             {
@@ -721,12 +786,46 @@ void MainWindow::on_pickUpButton_clicked()
                 ui->statusBar->setText("cannot use this item");
             }
             break;
-        //default:
-            //add code here
+        case 6:
+            currentGuess += letters[currentLetter];
+            if(currentGuess.length() == 5)
+            {
+                if(currentGuess == wordleWords[currentWord])
+                {
+                    currentWord++;
+                    currentGuess.clear();
+                    previousGuesses.clear();
+                    currentEnemy->setLongDescription("word eater", 5,  "devourer of words\n\nword " + to_string(currentWord + 1) + "/6 \nenter a 5 letter word: " + currentGuess +
+                                                     "\n\nprevious guesses :\n" + displayPreviousGuesses() +
+                                                     "\n+ = correct position\n* = letter in wrong position\n- = letter not in word\n\n(warning: some of the words are two words, eg. afish)");
+                    ui->textEdit->setText(QConvert::convert(currentEnemy->getLongDescription()));
+                    displayLetters();
+                    atkEnemy(100);
+                    if (currentRoom->checkForEnemy()) displayLetters();
+                } else {
+                    compareWords();
+                    currentGuess.clear();
+                    currentEnemy->setLongDescription("word eater", 5,  "devourer of words\n\nword " + to_string(currentWord + 1) + "/6 \nenter a 5 letter word: " + currentGuess +
+                                                     "\n\nprevious guesses :\n" + displayPreviousGuesses() +
+                                                     "\n+ = correct position\n* = letter in wrong position\n- = letter not in word\n\n(warning: some of the words are two words, eg. afish)");
+                    ui->textEdit->setText(QConvert::convert(currentEnemy->getLongDescription()));
+                    atkEnemy(1);
+                    if (currentRoom->checkForEnemy()) displayLetters();
+                }
+
+            } else {
+                currentEnemy->setLongDescription("word eater", 5,  "devourer of words\n\nword " + to_string(currentWord + 1) + "/6 \nenter a 5 letter word: " + currentGuess +
+                                                 "\n\nprevious guesses :\n" + displayPreviousGuesses() +
+                                                 "\n+ = correct position\n* = letter in wrong position\n- = letter not in word\n\n(warning: some of the words are two words, eg. afish)");
+                ui->textEdit->setText(QConvert::convert(currentEnemy->getLongDescription()));
+            }
+            break;
+        default:
+            break;
     }
 }
 
-//inventory, blank, close inventory, cancel, quit, cancel(stop item use)
+//inventory, blank, close inventory, cancel, quit, cancel(stop item use), (delete)
 void MainWindow::on_inventoryButton_clicked()
 {
     switch (state)
@@ -744,9 +843,7 @@ void MainWindow::on_inventoryButton_clicked()
             }
 
             break;
-        case 1:
-            ///blank
-            break;
+        //blank 1
         case 2:
             ui->statusBar->setText(" ");
             moveState();
@@ -776,8 +873,15 @@ void MainWindow::on_inventoryButton_clicked()
             ui->statusBar->setText(" ");
             ui->textEdit->setText(QConvert::convert(currentEnemy->getLongDescription()));
             break;
-        //default:
-            //add code here
+        case 6:
+            if(currentGuess != "") currentGuess.pop_back();
+            currentEnemy->setLongDescription("word eater", 5,  "devourer of words\n\nword " + to_string(currentWord + 1) + "/6 \nenter a 5 letter word: " + currentGuess +
+                                             "\n\nprevious guesses :\n" + displayPreviousGuesses() +
+                                             "\n+ = correct position\n* = letter in wrong position\n- = letter not in word\n\n(warning: some of the words are two words, eg. afish)");
+            ui->textEdit->setText(QConvert::convert(currentEnemy->getLongDescription()));
+            break;
+        default:
+            break;
     }
 
 

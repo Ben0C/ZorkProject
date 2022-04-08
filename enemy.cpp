@@ -78,6 +78,11 @@ void Enemy::setDescription(string description)
     this->description = description;
 }
 
+void Enemy::setLongDescription(string inName, int inDmg, string inDescription)
+{
+        longDescription = (inName + "\natk: " + to_string(inDmg) + "\n\n" + inDescription);
+}
+
 void Enemy::setHealth(int health)
 {
     this->health = health;
