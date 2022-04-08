@@ -646,8 +646,8 @@ void MainWindow::on_eastButton_clicked()
             //moveState();
             if(charItems[currentItem].getWeaponCheck()){
                 showRoomDetails();
-                ui->statusBar->setText(QConvert::convert(mainChar.equipWeapon(currentItem)));
                 moveState();
+                ui->statusBar->setText(QConvert::convert(mainChar.equipWeapon(currentItem)));
             } else if (charItems[currentItem].getHealing() > 0){
                 heal(charItems[currentItem]);
                 int healed = charItems[currentItem].getHealing();
