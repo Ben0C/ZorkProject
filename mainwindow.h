@@ -41,13 +41,14 @@ private slots:
 
     void on_pickUpButton_clicked();
 
-    void on_InventoryButton_clicked();
+    void on_inventoryButton_clicked();
 
 private:
     Ui::MainWindow *ui;
 
     //Zork parts
     Character mainChar;
+    void moveCharIcon(string direction);
     vector<Room*> rooms;
     vector<Item> charItems;
     Room *currentRoom;
@@ -55,13 +56,14 @@ private:
     Boss *floorBoss;
     int currentItem;
     Enemy *currentEnemy;
+    string directionToMove;
     QString enemyName;
     QString charDmg;
     int battleTurn;
     int state; //0 move, 1 fight, 2 inventory, 3 selecting items
     Room* randomRoom();
     void createRooms();
-    //void setShortcuts();
+    void setShortcuts();
     void printWelcome();
     void showRoomDetails();
     QString getRoomDetails();

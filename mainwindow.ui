@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>561</width>
+      <width>461</width>
       <height>301</height>
      </rect>
     </property>
@@ -35,7 +35,7 @@
      <rect>
       <x>10</x>
       <y>450</y>
-      <width>381</width>
+      <width>291</width>
       <height>121</height>
      </rect>
     </property>
@@ -70,12 +70,12 @@
      </item>
     </layout>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="zorkMap">
     <property name="geometry">
      <rect>
-      <x>600</x>
+      <x>500</x>
       <y>50</y>
-      <width>371</width>
+      <width>471</width>
       <height>471</height>
      </rect>
     </property>
@@ -86,9 +86,9 @@
    <widget class="QWidget" name="gridLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>320</x>
       <y>450</y>
-      <width>161</width>
+      <width>151</width>
       <height>121</height>
      </rect>
     </property>
@@ -101,7 +101,7 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QPushButton" name="InventoryButton">
+      <widget class="QPushButton" name="inventoryButton">
        <property name="text">
         <string>InventoryButton</string>
        </property>
@@ -112,9 +112,9 @@
    <widget class="QProgressBar" name="enemyHealthBar">
     <property name="geometry">
      <rect>
-      <x>600</x>
+      <x>500</x>
       <y>10</y>
-      <width>371</width>
+      <width>471</width>
       <height>23</height>
      </rect>
     </property>
@@ -131,9 +131,9 @@
    <widget class="QProgressBar" name="playerHealthBar">
     <property name="geometry">
      <rect>
-      <x>600</x>
+      <x>500</x>
       <y>540</y>
-      <width>371</width>
+      <width>471</width>
       <height>23</height>
      </rect>
     </property>
@@ -149,18 +149,35 @@
      <rect>
       <x>10</x>
       <y>350</y>
-      <width>561</width>
+      <width>461</width>
       <height>85</height>
      </rect>
     </property>
+    <property name="textInteractionFlags">
+     <set>Qt::NoTextInteraction</set>
+    </property>
    </widget>
-   <zorder>label</zorder>
+   <widget class="QLabel" name="charIcon">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>460</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <zorder>zorkMap</zorder>
    <zorder>gridLayoutWidget</zorder>
    <zorder>gridLayoutWidget_2</zorder>
    <zorder>enemyHealthBar</zorder>
    <zorder>playerHealthBar</zorder>
    <zorder>statusBar</zorder>
    <zorder>textEdit</zorder>
+   <zorder>charIcon</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

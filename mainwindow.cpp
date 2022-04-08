@@ -4,7 +4,8 @@ using namespace std;
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#define map "../ZorkProject/Images/glep.png"
+#define map "../ZorkProject/Images/ZorkMap.png"
+#define mapCharacter "../ZorkProject/Images/MapCharacter.png"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -13,8 +14,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    QPixmap pix(map);
-    ui->label->setPixmap(pix.scaled(371, 471, Qt::KeepAspectRatio));
+    setShortcuts();
+    QPixmap zorkMap(map);
+    QPixmap charIcon(mapCharacter);
+    ui->zorkMap->setPixmap(zorkMap.scaled(471, 471, Qt::KeepAspectRatio));
+    ui->charIcon->setPixmap(charIcon.scaled(41, 41, Qt::KeepAspectRatio));
     ui->enemyHealthBar->setStyleSheet("QProgressBar::chunk {background: red}");
     ui->playerHealthBar->setStyleSheet("QProgressBar::chunk {background: green}");
 
@@ -31,6 +35,10 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    for(int i = 0; i< rooms.size(); i++)
+    {
+        delete rooms[i];
+    }
 }
 
 namespace QConvert
@@ -47,75 +55,122 @@ namespace QConvert
     }
 }
 
-void MainWindow::createRooms()  {
-    Room *a, *b, *c, *d, *e, *f, *g, *h, *i, *j;
-
+void MainWindow::createRooms()  {  
+    Room *a, *b, *c, *d, *e, *f, *g, *h, *i, *j, *k, *l, *f1, *g1, *h1, *i1, *j1, *k1, *l1, *m1, *g2, *h2, *i2, *j2, *k2, *m2, *i3, *j3, *k3, *j4, *k4;
 
     a = new Room();
-        a->addItem(new Item("weapon", 1, 10, 0, true, false));
-        //a->addItem(new Item("y", 2, 22, false));
-    b = new Room("b");
-        b->addItem(new Item("x1", 3, 1, 0,  false, true));
-        b->addItem(new Item("y1", 4, 0, 1, false, false));
-        b->setEnemy(BasicEnemy("bat", "flies about aimlessly", 5, 2, 3));
-    c = new Room("c");
-        c->addItem(new Item("x2", 3, 0, 1, false, false));
-        c->addItem(new Item("y2", 4, 1, 0, false, true));
-        c->addItem(new Item("z2", 4, 0, 1, false, false));
-        c->setEnemy(BasicEnemy("bat", "flies about aimlessly", 5, 20, 3));
-    d = new Room("d");
-        d->addItem(new Item("x3", 3, 0, 1, false, false));
-        d->addItem(new Item("y3", 4, 0, 1, false, false));
-        d->addItem(new Item("z3", 4, 0, 1, false, false));
-        d->addItem(new Item("q3", 4, 0, 1, false, false));
-    e = new Room("e");
-    f = new Room("f");
-        f->addItem(new Item("x4", 3, 0, 1, false, false));
-        f->addItem(new Item("y4", 4, 1, 0, false, true));
-        f->addItem(new Item("z4", 4, 1, 0, false, true));
-        f->addItem(new Item("q4", 4, 0, 1, false, false));
-    g = new Room("g");
-        Boss *fBoss = new Boss(2, "grog", "grogs around", 30, 5, 20);
+    b = new Room();
+    c = new Room();
+    d = new Room();
+    e = new Room();
+        e->addItem(Item("sword", 10, 5, 0, true, false));
+        e->setEnemy(BasicEnemy("bat", "the bat flies about aimlessly", 5, 2, 3));
+    f = new Room();
+    g = new Room();
+    h = new Room();
+        h->addItem(Item("rock", 3, 11, 0, false, true));
+        h->addItem(Item("potion", 1, 0, 10, false, false));
+    i = new Room();
+    j = new Room();
+    k = new Room();
+    l = new Room();
+        l->addItem(Item("trophie", 10, 50, 0, true, false));
+        Boss *fBoss = new Boss(2, "grog", "grog is groging about menacingly", 30, 5, 20);
         floorBoss = dynamic_cast<Boss*>(fBoss);
-        g->setEnemy(*floorBoss);
-    h = new Room("h");
-    i = new Room("i");
-    j = new Room("j");
+        l->setEnemy(*floorBoss);
+    f1 = new Room();
+    g1 = new Room();
+    h1 = new Room();
+    i1 = new Room();
+    j1 = new Room();
+    k1 = new Room();
+    l1 = new Room();
+    m1 = new Room();
+        m1->addItem(Item("bomb", 5, 50, 0, false, true));
+    g2 = new Room();
+    h2 = new Room();
+    i2 = new Room();
+    j2 = new Room();
+    k2 = new Room();
+        k2->addItem(Item("baseball bat", 5, 10, 0, true, false));
+        k2->setEnemy(BasicEnemy("bat", "the bat sits on the groud stationary", 1, 0, 0));
+    m2 = new Room();
+        m2->addItem(Item("greater potion", 2, 0, 30, false, false));
+    i3 = new Room();
+    j3 = new Room();
+    k3 = new Room();
+        k3->addItem(Item("axe", 20, 17, 0, true, false));
+    j4 = new Room();
+    k4 = new Room();
+        k4->addItem(Item("brick", 6, 15, 0, false, true));
 
+                //N, E, S, W
+    a->setExits(b, NULL, NULL, NULL);
+    b->setExits(NULL, c, a, NULL);
+    c->setExits(d, NULL, NULL, b);
+    d->setExits(NULL, e, c, NULL);
+    e->setExits(f, NULL, f1, d);
+    f->setExits(NULL, g, e, g2);
+    g->setExits(h, NULL, NULL, f);
+    h->setExits(i, NULL, g, NULL);
+    i->setExits(NULL, j, h, j4);
+    j->setExits(NULL, k, NULL, i);
+    k->setExits(l, NULL, NULL, j);
+    l->setExits(NULL, NULL, k, NULL);
+    f1->setExits(e, g1, NULL, NULL);
+    g1->setExits(NULL, NULL, h1, f1);
+    h1->setExits(g1, i1, NULL, NULL);
+    i1->setExits(NULL, j1, NULL, h1);
+    j1->setExits(k1, NULL, NULL, i1);
+    k1->setExits(l1, NULL, j1, NULL);
+    l1->setExits(m1, NULL, k1, m2);
+    m1->setExits(NULL, NULL, l1, NULL);
+    g2->setExits(NULL, f, NULL, h2);
+    h2->setExits(i2, g2, i3, NULL);
+    i2->setExits(NULL, NULL, h2, j2);
+    j2->setExits(k2, i2, NULL, NULL);
+    k2->setExits(NULL, NULL, j2, NULL);
+    m2->setExits(NULL, l1, NULL, NULL);
+    i3->setExits(h2, NULL, NULL, j3);
+    j3->setExits(NULL, i3, NULL, NULL);
+    k3->setExits(NULL, NULL, j4, NULL);
+    j4->setExits(k3, i, NULL, k4);
+    k4->setExits(NULL, j4, NULL, NULL);
 
-//             (N, E, S, W)
-    a->setExits(f, b, d, c);
-    b->setExits(NULL, NULL, NULL, a);
-    c->setExits(NULL, a, NULL, NULL);
-    d->setExits(a, e, NULL, i);
-    e->setExits(NULL, NULL, NULL, d);
-    f->setExits(NULL, g, a, h);
-    g->setExits(NULL, NULL, NULL, f);
-    h->setExits(NULL, f, NULL, NULL);
-    i->setExits(NULL, d, NULL, j);
-    j->setExits(NULL, i, NULL, NULL);
-
-    rooms = {a, b, c, d, e, f, g, h, i, j};
+    rooms = {a, b, c, d, e, f, g, h, i, j, k, l, f1, g1, h1, i1, j1, k1, l1, m1, g2, h2, i2, j2, k2, m2, i3, j3, k3, j4, k4};
     currentRoom = a;
-
     //example of a reference to a room
-    Room & refToRoom = *currentRoom;
+    Room &refToRoom = *currentRoom;
+
 }
 
-/*
+
 void MainWindow::setShortcuts(){
-    QShortcut w(QKeySequence('w'), ui->pushButton);
-    QShortcut s(QKeySequence('s'), ui->pushButton_2);
-    QShortcut d(QKeySequence('d'), ui->pushButton_3);
-    QShortcut a(QKeySequence('a'), ui->pushButton_4);
+    QShortcut *shortcutW = new QShortcut(QKeySequence("W"), ui->centralwidget);
+    QObject::connect(shortcutW, SIGNAL(activated()), this, SLOT(on_northButton_clicked()));
 
-     //QObject::connect(w, SIGNAL(activated()), ui->pushButton, SLOT(on_pushButton_clicked()));
+    QShortcut *shortcutS = new QShortcut(QKeySequence("S"), ui->centralwidget);
+    QObject::connect(shortcutS, SIGNAL(activated()), this, SLOT(on_southButton_clicked()));
+
+    QShortcut *shortcutD = new QShortcut(QKeySequence("D"), ui->centralwidget);
+    QObject::connect(shortcutD, SIGNAL(activated()), this, SLOT(on_eastButton_clicked()));
+
+    QShortcut *shortcutA = new QShortcut(QKeySequence("A"), ui->centralwidget);
+    QObject::connect(shortcutA, SIGNAL(activated()), this, SLOT(on_westButton_clicked()));
+
+    QShortcut *shortcutQ = new QShortcut(QKeySequence("Q"), ui->centralwidget);
+    QObject::connect(shortcutQ, SIGNAL(activated()), this, SLOT(on_pickUpButton_clicked()));
+
+    QShortcut *shortcutE = new QShortcut(QKeySequence("E"), ui->centralwidget);
+    QObject::connect(shortcutE, SIGNAL(activated()), this, SLOT(on_inventoryButton_clicked()));
+
 }
-*/
+
 
 inline void MainWindow::printWelcome()
 {
     showRoomDetails();
+    ui->statusBar->setText("you can control the buttons with your keyboard\nDirectional buttons = WASD\nPick Up = Q\nInventory = E");
 }
 
 inline void MainWindow::showRoomDetails()
@@ -126,6 +181,20 @@ inline void MainWindow::showRoomDetails()
 inline QString MainWindow::getRoomDetails()
 {
     return QConvert::convert(currentRoom->longDescription());
+}
+
+void MainWindow::moveCharIcon(string direction)
+{
+    if(direction == "north")
+    {
+        ui->charIcon->setGeometry(ui->charIcon->geometry().x(), ui->charIcon->geometry().y() - 64, 41, 41);
+    } else if(direction == "south") {
+        ui->charIcon->setGeometry(ui->charIcon->geometry().x(), ui->charIcon->geometry().y() + 64, 41, 41);
+    }  else if(direction == "east") {
+        ui->charIcon->setGeometry(ui->charIcon->geometry().x() + 64, ui->charIcon->geometry().y(), 41, 41);
+    } else {
+        ui->charIcon->setGeometry(ui->charIcon->geometry().x() - 64, ui->charIcon->geometry().y(), 41, 41);
+    }
 }
 
 void MainWindow::goRoom(string direction) {
@@ -143,6 +212,7 @@ void MainWindow::goRoom(string direction) {
         currentRoom = nextRoom;
         if(currentRoom->checkForEnemy())
         {
+            directionToMove = direction;
             fightState();
             battleTurn = 0;
             currentEnemy = currentRoom->getEnemy();
@@ -153,6 +223,7 @@ void MainWindow::goRoom(string direction) {
             ui->textEdit->setText(QConvert::convert(currentEnemy->getLongDescription()));
             return;
         }
+        moveCharIcon(direction);
         showRoomDetails();
     }
 }
@@ -233,6 +304,7 @@ void MainWindow::atkEnemy(int inDmg)
     {
         currentEnemy->slain();
         currentRoom->removeEnemy();
+        moveCharIcon(directionToMove);
         showRoomDetails();
         ui->statusBar->setText("Turn " + QConvert::convertToString(battleTurn) +
                               "\nyou dealt " + QConvert::convertToString(inDmg) + " damage to " + enemyName +
@@ -244,6 +316,7 @@ void MainWindow::atkEnemy(int inDmg)
         {
             currentEnemy->slain();
             currentRoom->removeEnemy();
+            moveCharIcon(directionToMove);
             showRoomDetails();
             ui->statusBar->setText("Turn " + QConvert::convertToString(battleTurn) +
                                   "\nyou dealt " + QConvert::convertToString(inDmg) + " damage to " + enemyName +
@@ -329,11 +402,11 @@ void MainWindow::moveState()
     state = 0;
     ui->enemyHealthBar->setTextVisible(false);
     ui->enemyHealthBar->setValue(0);
-    ui->northButton->setText("North");
+    ui->northButton->setText("North" );
     ui->southButton->setText("South");
     ui->eastButton->setText("East");
     ui->westButton->setText("West");
-    ui->InventoryButton->setText("Inventory");
+    ui->inventoryButton->setText("Inventory");
     ui->pickUpButton -> setText("Pick Up");
 }
 
@@ -345,7 +418,7 @@ void MainWindow::fightState()
     ui->southButton->setText("Run");
     ui->eastButton->setText("Item");
     ui->westButton->setText("Inspect");
-    ui->InventoryButton->setText("");
+    ui->inventoryButton->setText("");
     ui->pickUpButton -> setText("");
 }
 
@@ -356,7 +429,7 @@ void MainWindow::inventoryState()
     ui->southButton->setText("Down");
     ui->eastButton->setText("Equip/Use");
     ui->westButton->setText("Inspect");
-    ui->InventoryButton->setText("Close Inventory");
+    ui->inventoryButton->setText("Close Inventory");
     ui->pickUpButton -> setText("Drop");
 }
 
@@ -367,7 +440,7 @@ void MainWindow::gameOverState()
     ui->southButton->setText("");
     ui->eastButton->setText("");
     ui->westButton->setText("");
-    ui->InventoryButton->setText("Quit");
+    ui->inventoryButton->setText("Quit");
     ui->pickUpButton -> setText("");
 }
 
@@ -378,7 +451,7 @@ void MainWindow::battleInventoryState()
     ui->southButton->setText("Down");
     ui->eastButton->setText("");
     ui->westButton->setText("");
-    ui->InventoryButton->setText("Cancel");
+    ui->inventoryButton->setText("Cancel");
     ui->pickUpButton -> setText("Use");
 }
 
@@ -558,7 +631,7 @@ void MainWindow::on_eastButton_clicked()
     }
 }
 
-//west, inspect(fight), inspect(inventory)
+//west, inspect, inspect(inventory)
 void MainWindow::on_westButton_clicked()
 {
     switch (state)
@@ -567,7 +640,7 @@ void MainWindow::on_westButton_clicked()
             goRoom("west");
             break;
         case 1:
-            //add code here
+            ui->statusBar->setText("its a " + QConvert::convert(currentEnemy->getName()));
             break;
         case 2:
             moveState();
@@ -614,8 +687,9 @@ void MainWindow::on_pickUpButton_clicked()
         case 0:
             if ((currentRoom->getItems()).size() > 0)
             {
+                ui->statusBar->setText(" ");
                 selectItems((currentRoom->getItems()).size());
-                   ui->InventoryButton->setText("Cancel");
+                   ui->inventoryButton->setText("Cancel");
             } else {
                 ui->statusBar->setText("no items in room");
             }
@@ -651,7 +725,7 @@ void MainWindow::on_pickUpButton_clicked()
 }
 
 //inventory, blank, close inventory, cancel, quit, cancel(stop item use)
-void MainWindow::on_InventoryButton_clicked()
+void MainWindow::on_inventoryButton_clicked()
 {
     switch (state)
     {
@@ -718,6 +792,9 @@ T templateTest(T x, T y)
     y = temp;
     T & reference = temp;
 }
+
+
+
 
 
 
