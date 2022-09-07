@@ -1,4 +1,4 @@
-IMPLEMENTED
+IMPLEMENTED(Required for the project)
 
 Wordle enemy
 inline functions
